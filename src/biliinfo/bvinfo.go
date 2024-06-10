@@ -1,9 +1,5 @@
 package biliinfo
 
-import (
-	"regexp"
-)
-
 type BvInfo struct {
 	BVID       string
 	Title      string
@@ -49,21 +45,4 @@ type videoStat struct {
 type partInfo struct {
 	PartId   int32
 	PartName string
-}
-
-func GetPlayInfo(address string) (*BvInfo, error) {
-	u, err := resolveAddress(address)
-	if err != nil {
-		return nil, err
-	}
-	document, err := getDocument(initBiliRequest(u))
-	if err != nil {
-		return nil, err
-	}
-	regx := regexp.MustCompile("<script>window.__playinfo__ *= *({.*}) *</script>")
-	match := regx.FindStringSubmatch(document)[1]
-	if match == "" {
-		return nil, nil
-	}
-	return nil, nil
 }

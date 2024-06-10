@@ -9,8 +9,7 @@ import (
 func main() {
 	log.SetOutput(os.Stdout)
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
-	raw, err := os.ReadFile(".temp/rnbvocal.html")
-	raw_string := string(raw)
+	raw_string, err := biliinfo.GetDocument("BV1nz421h76u")
 	check(err)
 	info, err := biliinfo.ParseBvInfo(raw_string)
 	check(err)
