@@ -12,7 +12,7 @@ func main() {
 	raw, err := os.ReadFile(".temp/rnbvocal.html")
 	raw_string := string(raw)
 	check(err)
-	info, err := biliinfo.ParseRawInitialState(raw_string)
+	info, err := biliinfo.ParseBvInfo(raw_string)
 	check(err)
 	log.Println(info)
 }

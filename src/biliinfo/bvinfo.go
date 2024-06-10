@@ -5,15 +5,18 @@ import (
 )
 
 type BvInfo struct {
-	BVID     string
-	Title    string
-	Duration float32 // in seconds
-	Up       UpInfo
-	Videos   []VideoInfo
-	Audios   []AudioInfo
+	BVID       string
+	Title      string
+	Duration   float32 // in seconds
+	PartID     int32   // 分P
+	Up         upInfo
+	Videos     []videoInfo
+	Audios     []audioInfo
+	Parts      []partInfo // 视频分P
+	Statistics videoStat
 }
 
-type VideoInfo struct {
+type videoInfo struct {
 	Url       string
 	UrlBackup []string
 	MimeType  string
@@ -22,20 +25,19 @@ type VideoInfo struct {
 	FrameRate float32
 }
 
-type AudioInfo struct {
+type audioInfo struct {
 	Url       string
 	UrlBackup []string
 	MimeType  string
 }
 
-type UpInfo struct {
-	Mid     string
+type upInfo struct {
 	Name    string
 	Profile string
 	Sex     string
 }
 
-type VideoStat struct {
+type videoStat struct {
 	View      uint32 // 观看
 	Like      uint32 // 点赞
 	Coin      uint32 // 投币
@@ -44,10 +46,9 @@ type VideoStat struct {
 }
 
 // 视频分P信息
-type PartInfo struct {
+type partInfo struct {
 	PartId   int32
 	PartName string
-	Duration uint32 // in seconds
 }
 
 func GetPlayInfo(address string) (*BvInfo, error) {

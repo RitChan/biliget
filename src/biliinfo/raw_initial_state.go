@@ -19,6 +19,7 @@ type rawInitialStateVideoData struct {
 
 type rawInitialStateVideoDataStat struct {
 	View      int `json:"view"`
+	Like      int `json:"like"`
 	Reply     int `json:"reply"`
 	Favourite int `json:"favourite"`
 	Coin      int `json:"coin"`
