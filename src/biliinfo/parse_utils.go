@@ -2,6 +2,7 @@ package biliinfo
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"regexp"
 	"strconv"
@@ -95,6 +96,9 @@ func ParseRawInitialState(document string) (*RawInitialState, error) {
 			continue
 		}
 		break
+	}
+	if rawInitialState == nil {
+		return nil, errors.New("cannot find initial state scrtip for parsing")
 	}
 	return rawInitialState, nil
 }
