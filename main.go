@@ -9,9 +9,9 @@ import (
 func main() {
 	log.SetOutput(os.Stdout)
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
-	raw_string, err := biliinfo.GetDocument("BV1YJ4m1g7EQ")
+	bytes, err := biliinfo.BiliGetAddress("BV1YJ4m1g7EQ")
 	check(err)
-	info, err := biliinfo.ParseBvInfo(raw_string)
+	info, err := biliinfo.ParseBvInfo(string(bytes))
 	check(err)
 	log.Println(info)
 }

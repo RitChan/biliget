@@ -10,26 +10,46 @@ import (
 
 var session *http.Client = nil
 
-func GetDocument(address string) (string, error) {
-	url, err := resolveAddress(address)
+func BiliGetAddress(address string) ([]byte, error) {
+	u, err := resolveAddress(address)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	req, err := initBiliGetRequest(url)
+	bytes, err := biliGetUrlObject(u)
 	if err != nil {
-		return "", err
+		return nil, err
+	}
+	return bytes, nil
+}
+
+func BiliGetUrl(url_string string) ([]byte, error) {
+	u, err := url.Parse(url_string)
+	if err != nil {
+		return nil, err
+	}
+	bytes, err := biliGetUrlObject(u)
+	if err != nil {
+		return nil, err
+	}
+	return bytes, nil
+}
+
+func biliGetUrlObject(u *url.URL) ([]byte, error) {
+	req, err := initBiliGetRequest(u)
+	if err != nil {
+		return nil, err
 	}
 	client := getClient()
 	resp, err := client.Do(req)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	defer resp.Body.Close()
-	text, err := io.ReadAll(resp.Body)
+	bytes, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return string(text), nil
+	return bytes, nil
 }
 
 func getClient() *http.Client {
