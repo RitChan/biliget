@@ -1,7 +1,7 @@
 package main
 
 import (
-	"biliget/src/biliinfo"
+	"biliget/biliinfo"
 	"log"
 	"os"
 )
