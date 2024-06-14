@@ -1,4 +1,4 @@
-package biliinfo
+package bvinfo
 
 import (
 	"encoding/json"

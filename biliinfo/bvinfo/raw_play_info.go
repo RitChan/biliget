@@ -1,4 +1,4 @@
-package biliinfo
+package bvinfo
 
 type RawPlayInfo struct {
 	Data rawPlayInfoData `json:"data"`

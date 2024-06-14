@@ -1,4 +1,4 @@
-package biliinfo
+package bvinfo
 
 type BvInfo struct {
 	BVID       string

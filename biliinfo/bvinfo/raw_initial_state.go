@@ -1,4 +1,4 @@
-package biliinfo
+package bvinfo
 
 type RawInitialState struct {
 	BVID      string                   `json:"bvid"`
