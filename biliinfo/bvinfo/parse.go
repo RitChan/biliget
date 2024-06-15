@@ -12,11 +12,11 @@ import (
 )
 
 func ParseBvInfo(document string) (*BvInfo, error) {
-	initialState, err := ParseRawInitialState(document)
+	initialState, err := parseRawInitialState(document)
 	if err != nil {
 		return nil, err
 	}
-	playInfo, err := ParseRawPlayInfo(document)
+	playInfo, err := parseRawPlayInfo(document)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +71,7 @@ func ParseBvInfo(document string) (*BvInfo, error) {
 	return bvinfo, nil
 }
 
-func ParseRawInitialState(document string) (*RawInitialState, error) {
+func parseRawInitialState(document string) (*RawInitialState, error) {
 	node, err := html.Parse(strings.NewReader(document))
 	if err != nil {
 		return nil, err
@@ -103,7 +103,7 @@ func ParseRawInitialState(document string) (*RawInitialState, error) {
 	return rawInitialState, nil
 }
 
-func ParseRawPlayInfo(document string) (*RawPlayInfo, error) {
+func parseRawPlayInfo(document string) (*RawPlayInfo, error) {
 	node, err := html.Parse(strings.NewReader(document))
 	if err != nil {
 		return nil, err
