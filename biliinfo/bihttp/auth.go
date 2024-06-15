@@ -3,6 +3,7 @@ package bihttp
 import (
 	"encoding/json"
 	"io"
+	"net/http"
 	"net/url"
 )
 
@@ -42,7 +43,7 @@ func BiliGetQrcodeUrl() (*getQrcodeUrlResp, error) {
 }
 
 // Returns (resp json struct, Set-Cookie header values, error)
-func BiliQrcodePoll(qrcodeKey string) (*qrCodePollResp, []string, error) {
+func BiliQrcodePoll(qrcodeKey string) (*qrCodePollResp, []*http.Cookie, error) {
 	// Construct request
 	u, err := url.Parse(urlQrcodePoll)
 	if err != nil {
@@ -72,6 +73,10 @@ func BiliQrcodePoll(qrcodeKey string) (*qrCodePollResp, []string, error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	setCookies := resp.Header.Values("Set-Cookie")
-	return jsonResult, setCookies, err
+	rawCookies := resp.Header.Values("Set-Cookie")
+	cookies := make([]*http.Cookie, 0, len(rawCookies))
+	for _, rawCookie := range rawCookies {
+		cookies = append(cookies, parseRawCookies(rawCookie)...)
+	}
+	return jsonResult, cookies, err
 }

@@ -29,6 +29,12 @@ func main() {
 		err = os.WriteFile(".temp/audio.mp4", bytes, 0666)
 		check(err)
 	}
+	// client := bihttp.GetClient()
+	// u, _ := url.Parse("https://www.bilibili.com")
+	// bihttp.DumpCookies(".temp/cookie.json", client.Jar.Cookies(u))
+	// cookies, err := bihttp.LoadCookies(".temp/cookie.json")
+	// check(err)
+	// log.Println(cookies)
 }
 
 func check(err error) {

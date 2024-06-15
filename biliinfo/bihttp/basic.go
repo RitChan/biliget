@@ -63,7 +63,7 @@ func biliGetUrlObject(u *url.URL) ([]byte, error) {
 }
 
 func biliDoRequest(req *http.Request) (*http.Response, error) {
-	client := getClient()
+	client := GetClient()
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func biliDoRequest(req *http.Request) (*http.Response, error) {
 func resolveAddress(address string) (*url.URL, error) {
 	var url_object *url.URL
 	if strings.HasPrefix(address, "BV") {
-		url_string, err := url.JoinPath("https://www.bilibili.com/video/", address)
+		url_string, err := url.JoinPath(urlBilibiliVideo, address)
 		if err != nil {
 			return nil, err
 		}

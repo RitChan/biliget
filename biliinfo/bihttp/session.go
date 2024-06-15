@@ -8,7 +8,7 @@ import (
 
 var session *http.Client = nil
 
-func getClient() *http.Client {
+func GetClient() *http.Client {
 	if session == nil {
 		session = new(http.Client)
 		session.Jar, _ = cookiejar.New(nil)
@@ -23,6 +23,6 @@ func initBiliGetRequest(u *url.URL) (*http.Request, error) {
 	}
 	req.URL = u
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36")
-	req.Header.Set("referer", "https://www.bilibili.com")
+	req.Header.Set("referer", urlBilibili)
 	return req, nil
 }
