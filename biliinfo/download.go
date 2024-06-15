@@ -10,30 +10,6 @@ import (
 
 var session *http.Client = nil
 
-func BiliGetAddress(address string) ([]byte, error) {
-	u, err := resolveAddress(address)
-	if err != nil {
-		return nil, err
-	}
-	bytes, err := biliGetUrlObject(u)
-	if err != nil {
-		return nil, err
-	}
-	return bytes, nil
-}
-
-func BiliGetUrl(url_string string) ([]byte, error) {
-	u, err := url.Parse(url_string)
-	if err != nil {
-		return nil, err
-	}
-	bytes, err := biliGetUrlObject(u)
-	if err != nil {
-		return nil, err
-	}
-	return bytes, nil
-}
-
 func biliGetUrlObject(u *url.URL) ([]byte, error) {
 	req, err := initBiliGetRequest(u)
 	if err != nil {
