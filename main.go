@@ -3,13 +3,13 @@ package main
 import (
 	"biliget/biliinfo/bihttp"
 	"biliget/biliinfo/bvinfo"
+	"biliget/config"
 	"log"
 	"os"
 )
 
 func main() {
-	log.SetOutput(os.Stdout)
-	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
+	config.Initialize()
 	bytes, err := bihttp.BiliGetAddress("BV1YJ4m1g7EQ")
 	check(err)
 	err = os.WriteFile(".temp/debug.html", bytes, 0666)
