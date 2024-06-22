@@ -5,6 +5,7 @@ import (
 	"biliget/biliinfo/bvinfo"
 	"biliget/config"
 	"biliget/ffmpeg"
+	"biliget/gui"
 	"log"
 	"os"
 	"path/filepath"
@@ -12,6 +13,10 @@ import (
 )
 
 func main() {
+	gui.RunGIU()
+}
+
+func debug() {
 	config.Initialize()
 	bytes, err := bihttp.BiliGetAddress("BV1YJ4m1g7EQ")
 	check(err)
