@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	gui.RunGIU()
+	gui.RunGiuExample()
 }
 
 func debug() {
