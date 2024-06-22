@@ -13,11 +13,12 @@ import (
 )
 
 func main() {
-	gui.RunGiuExample()
+	config.Initialize()
+	// gui.RunGiuExample()
+	gui.RunGiuMain()
 }
 
-func debug() {
-	config.Initialize()
+func Debug() {
 	bytes, err := bihttp.BiliGetAddress("BV1YJ4m1g7EQ")
 	check(err)
 	err = os.WriteFile(".temp/debug.html", bytes, 0666)

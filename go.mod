@@ -17,6 +17,7 @@ require (
 	github.com/napsy/go-css v0.0.0-20221107082635-4ed403047a64 // indirect
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8 // indirect
 	github.com/sahilm/fuzzy v0.1.0 // indirect
+	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e // indirect
 	github.com/stretchr/testify v1.9.0 // indirect
 	golang.org/x/image v0.17.0 // indirect
 	golang.org/x/sys v0.21.0 // indirect
