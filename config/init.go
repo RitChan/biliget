@@ -16,5 +16,5 @@ func Initialize() {
 }
 
 func initializeCookies() {
-	bihttp.ClientAddCookies(bihttp.GetClient(), Global().CookieCache)
+	bihttp.ClientSetCookies(bihttp.GetClient(), Global().CookieCache)
 }

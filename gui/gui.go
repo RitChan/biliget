@@ -1,6 +1,8 @@
 package gui
 
 import (
+	gDraw "biliget/gui/draw"
+
 	g "github.com/AllenDang/giu"
 )
 
@@ -11,11 +13,12 @@ func RunGiuMain() {
 
 func loopMain() {
 	g.SingleWindow().Layout(
+		g.PrepareMsgbox(),
 		g.TabBar().TabItems(
 			g.TabItem("下载"),
 			g.TabItem("下载队列"),
 			g.TabItem("设置"),
 		),
-		g.Custom(drawLogin),
+		g.Custom(gDraw.DrawLogin),
 	)
 }

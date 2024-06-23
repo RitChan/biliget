@@ -7,6 +7,12 @@ import (
 	"net/url"
 )
 
+type QrCodePollResp struct {
+	Code    int                `json:"code"`
+	Message string             `json:"message"`
+	Data    qrCodePollRespData `json:"data"`
+}
+
 type getQrcodeUrlResp struct {
 	Code    int                  `json:"code"`
 	Message string               `json:"message"`
@@ -19,18 +25,12 @@ type getQrcodeUrlRespData struct {
 	QrcodeKey string `json:"qrcode_key"`
 }
 
-type qrCodePollResp struct {
-	Code    int                `json:"code"`
-	Message string             `json:"message"`
-	Data    qrCodePollRespData `json:"data"`
-}
-
 type qrCodePollRespData struct {
-	Url          string `json:"url"`
-	RefreshToken string `json:"refresh_token"`
-	Timestamp    string `json:"timestamp"`
-	Code         int    `json:"code"`
-	Message      string `json:"message"`
+	Url          string  `json:"url"`
+	RefreshToken string  `json:"refresh_token"`
+	Timestamp    float32 `json:"timestamp"`
+	Code         int     `json:"code"`
+	Message      string  `json:"message"`
 }
 
 func BiliGetQrcodeUrl() (*getQrcodeUrlResp, error) {
@@ -43,7 +43,7 @@ func BiliGetQrcodeUrl() (*getQrcodeUrlResp, error) {
 }
 
 // Returns (resp json struct, Set-Cookie header values, error)
-func BiliQrcodePoll(qrcodeKey string) (*qrCodePollResp, []*http.Cookie, error) {
+func BiliQrcodePoll(qrcodeKey string) (*QrCodePollResp, []*http.Cookie, error) {
 	// Construct request
 	u, err := url.Parse(urlQrcodePoll)
 	if err != nil {
@@ -68,7 +68,7 @@ func BiliQrcodePoll(qrcodeKey string) (*qrCodePollResp, []*http.Cookie, error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	jsonResult := new(qrCodePollResp)
+	jsonResult := new(QrCodePollResp)
 	err = json.Unmarshal(bytes, jsonResult)
 	if err != nil {
 		return nil, nil, err
