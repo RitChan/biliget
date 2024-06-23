@@ -1,7 +1,7 @@
 package draw
 
 import (
-	"biliget/gui/goroutines"
+	"biliget/gui/data"
 	"bytes"
 	"image"
 	"image/color"
@@ -31,7 +31,7 @@ func DrawLogin() {
 	canvas.AddCircle(center, radius, profileColor, 32, 2)
 
 	// QR Code
-	s, err := goroutines.GetQrcodeState()
+	s, err := data.GetQrcodeState()
 	if err != nil {
 		giu.Msgbox("Qrcode Error", err.Error()).Buttons(giu.MsgboxButtonsOk)
 	} else {
@@ -47,7 +47,7 @@ func DrawLogin() {
 			textCol := color.RGBA{0, 0, 0, 255}
 			canvas.AddRectFilled(rectMin, rectMax, rectColor, rectRound, giu.DrawFlagsRoundCornersAll)
 			canvas.AddText(textPos, textCol, s.Message)
-			if s.LoginState != goroutines.Succeeded {
+			if s.LoginState != data.Succeeded {
 				if s.QrKey != qrkey {
 					pngbytes, err := qrcode.Encode(s.QrUrl, qrcode.High, 180)
 					if err != nil {
@@ -61,6 +61,7 @@ func DrawLogin() {
 							qrkey = ""
 							qrtexture = nil
 						}
+						qrkey = s.QrKey
 						giu.EnqueueNewTextureFromRgba(img, func(t *giu.Texture) { qrtexture = t })
 					}
 				}

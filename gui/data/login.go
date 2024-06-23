@@ -1,8 +1,9 @@
-package goroutines
+package data
 
 import (
 	"biliget/biliinfo/bihttp"
 	"fmt"
+	"log"
 	"net/http"
 	"sync"
 	"time"
@@ -53,6 +54,7 @@ func GetQrcodeState() (*QrcodeState, error) {
 
 	if s.isTimeToPoll() {
 		s.potime = time.Now()
+		log.Println("poll login")
 		go pollLogin(s.QrKey)
 	}
 
@@ -80,6 +82,7 @@ func GetQrcodeState() (*QrcodeState, error) {
 			case 86038:
 				s.reset()
 				s.QrcodeExpired = true
+				log.Println("qrcode expired, reset qrcode state")
 			case 86090:
 				s.LoginState = ToVerify
 				s.Message = "请在手机确认"
