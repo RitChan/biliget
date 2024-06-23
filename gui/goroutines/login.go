@@ -44,7 +44,7 @@ const (
 var (
 	qrstate *QrcodeState
 	// test
-	pollLock    sync.Locker
+	pollLock    sync.Mutex
 	pollResults []*pollResult = make([]*pollResult, 0, 1)
 )
 

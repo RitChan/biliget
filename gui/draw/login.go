@@ -38,39 +38,38 @@ func DrawLogin() {
 		if s.LoginExpired {
 			giu.Msgbox("登录过期", "登录过期, 请重新登录").Buttons(giu.MsgboxButtonsOk)
 		}
-		if s.LoginState != goroutines.Succeeded && hovered {
-			pMin := image.Point{537, 53}
-			pMax := image.Point{787, 303}
-			qrColor := color.RGBA{255, 255, 255, 255}
-			canvas.AddRectFilled(pMin, pMax, qrColor, 12, giu.DrawFlagsRoundCornersAll)
-			canvas.AddText(image.Pt(633, 271), color.RGBA{0, 0, 0, 255}, s.Message)
-			if s.QrKey != qrkey {
-				pngbytes, err := qrcode.Encode(s.QrUrl, qrcode.High, 180)
-				if err != nil {
-					log.Println(err.Error())
-					qrkey = ""
-					qrtexture = nil
-				} else {
-					img, err := png.Decode(bytes.NewReader(pngbytes))
+		if hovered {
+			rectMin := image.Point{537, 53}
+			rectMax := image.Point{787, 303}
+			rectColor := color.RGBA{255, 255, 255, 255}
+			rectRound := float32(12)
+			textPos := image.Pt(633, 271)
+			textCol := color.RGBA{0, 0, 0, 255}
+			canvas.AddRectFilled(rectMin, rectMax, rectColor, rectRound, giu.DrawFlagsRoundCornersAll)
+			canvas.AddText(textPos, textCol, s.Message)
+			if s.LoginState != goroutines.Succeeded {
+				if s.QrKey != qrkey {
+					pngbytes, err := qrcode.Encode(s.QrUrl, qrcode.High, 180)
 					if err != nil {
 						log.Println(err.Error())
 						qrkey = ""
 						qrtexture = nil
+					} else {
+						img, err := png.Decode(bytes.NewReader(pngbytes))
+						if err != nil {
+							log.Println(err.Error())
+							qrkey = ""
+							qrtexture = nil
+						}
+						giu.EnqueueNewTextureFromRgba(img, func(t *giu.Texture) { qrtexture = t })
 					}
-					giu.EnqueueNewTextureFromRgba(img, func(t *giu.Texture) { qrtexture = t })
+				}
+				if qrtexture != nil {
+					pMin := image.Pt(571, 73)
+					pMax := pMin.Add(image.Pt(180, 180))
+					canvas.AddImage(qrtexture, pMin, pMax)
 				}
 			}
-			if qrtexture != nil {
-				pMin := image.Pt(571, 73)
-				pMax := pMin.Add(image.Pt(180, 180))
-				canvas.AddImage(qrtexture, pMin, pMax)
-			}
-		} else if s.LoginState == goroutines.Succeeded && hovered {
-			pMin := image.Point{537, 53}
-			pMax := image.Point{787, 303}
-			qrColor := color.RGBA{255, 255, 255, 255}
-			canvas.AddRectFilled(pMin, pMax, qrColor, 12, giu.DrawFlagsRoundCornersAll)
-			canvas.AddText(image.Pt(633, 271), color.RGBA{0, 0, 0, 255}, "登录成功")
 		}
 	}
 
