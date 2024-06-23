@@ -86,6 +86,7 @@ func setFile(config *FileConfig, filepath string) error {
 		return err
 	}
 	return nil
+
 }
 
 func appConfigPath() (string, error) {

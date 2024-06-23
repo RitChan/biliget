@@ -4,6 +4,7 @@ import (
 	"biliget/biliinfo/bihttp"
 	"fmt"
 	"net/http"
+	"sync"
 	"time"
 )
 
@@ -42,10 +43,18 @@ const (
 
 var (
 	qrstate *QrcodeState
+	// test
+	pollLock    sync.Locker
+	pollResults []*pollResult = make([]*pollResult, 0, 1)
 )
 
 func GetQrcodeState() (*QrcodeState, error) {
 	s := getQrcodeState()
+
+	if s.isTimeToPoll() {
+		s.potime = time.Now()
+		go pollLogin(s.QrKey)
+	}
 
 	switch s.LoginState {
 	case Succeeded:
@@ -57,30 +66,27 @@ func GetQrcodeState() (*QrcodeState, error) {
 		if s.qrExpired() {
 			s.reset()
 			s.QrcodeExpired = true
-		} else if s.isTimeToPoll() {
-			poResult := pollLogin(s.QrKey)
-			if poResult.key == s.QrKey {
-				if poResult.err != nil {
-					return nil, poResult.err
-				}
-				switch poResult.resp.Data.Code {
-				case 0:
-					s.Message = "登录成功"
-					s.LoginState = Succeeded
-					s.QrcodeExpired = false
-					s.LoginExpired = false
-					bihttp.SetCookies(poResult.cookies)
-				case 86038:
-					s.reset()
-					s.QrcodeExpired = true
-				case 86090:
-					s.LoginState = ToVerify
-					s.Message = "请在手机确认"
-				case 86101:
-					// 未扫码
-				default:
-					return nil, fmt.Errorf("polling error, code = %d", poResult.resp.Data.Code)
-				}
+		} else if poResult := fetchLatestPollResult(s.QrKey); poResult != nil {
+			if poResult.err != nil {
+				return nil, poResult.err
+			}
+			switch poResult.resp.Data.Code {
+			case 0:
+				s.Message = "登录成功"
+				s.LoginState = Succeeded
+				s.QrcodeExpired = false
+				s.LoginExpired = false
+				bihttp.SetCookies(poResult.cookies)
+			case 86038:
+				s.reset()
+				s.QrcodeExpired = true
+			case 86090:
+				s.LoginState = ToVerify
+				s.Message = "请在手机确认"
+			case 86101:
+				// 未扫码
+			default:
+				return nil, fmt.Errorf("polling error, code = %d", poResult.resp.Data.Code)
 			}
 		}
 	}
@@ -95,9 +101,32 @@ func getQrcodeState() *QrcodeState {
 	return qrstate
 }
 
-func pollLogin(qrkey string) pollResult {
+func pollLogin(qrkey string) {
 	resp, cookies, err := bihttp.BiliQrcodePoll(qrkey)
-	return pollResult{qrkey, resp, cookies, err}
+	result := pollResult{qrkey, resp, cookies, err}
+	writePollResult(&result)
+}
+
+func writePollResult(poResult *pollResult) {
+	pollLock.Lock()
+	defer pollLock.Unlock()
+	pollResults = append(pollResults, poResult)
+}
+
+func fetchLatestPollResult(qrkey string) *pollResult {
+	pollLock.Lock()
+	defer pollLock.Unlock()
+	if len(pollResults) == 0 {
+		return nil
+	}
+	var result *pollResult
+	for _, r := range pollResults {
+		if r.key == qrkey {
+			result = r
+		}
+	}
+	pollResults = make([]*pollResult, 0, 1)
+	return result
 }
 
 func loginExpired() bool {
